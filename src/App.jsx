@@ -8,7 +8,7 @@ import { BUSINESS, whatsappLink } from './config';
 import CoachingDemo from './demos/CoachingDemo';
 import RestaurantDemo from './demos/RestaurantDemo';
 import BusinessDemo from './demos/BusinessDemo';
-import logo from "../public/logo.png"
+import logo from "./assets/logo.png"
 
 /* ------------------------------------------------------------------ */
 /*  Content                                                            */
