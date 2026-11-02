@@ -1,0 +1,126 @@
+/* ===== Motion tracker / 3D layer ===== */
+
+/* tilt cards: JS drives `transform` directly */
+.m3d-tilt {
+  transform-style: preserve-3d;
+  transition-property: box-shadow, background, color, border-color, opacity, filter !important;
+}
+
+.m3d-tilt:hover {
+  box-shadow: 0 34px 60px -28px rgba(0, 0, 0, .45);
+}
+
+/* hero scene wrapper (laptop + phone + chips) */
+.m3d-scene {
+  position: relative;
+  min-height: inherit;
+  transform-style: preserve-3d;
+}
+
+/* full-page WebGL scene.
+   Home: sits BEHIND the content, so text and cards stay perfectly clean; it shows through
+   the white sections and, dimmed, through the black ones (it lights up around the cursor).
+   Demos: very light overlay on top (their sections are opaque). */
+.m3d-crystals {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ax-home {
+  position: relative;
+  z-index: 1;
+}
+
+/* content sits above the scene */
+.m3d-crystals.is-top {
+  z-index: 50;
+  opacity: .5;
+}
+
+.m3d-crystals canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ax-home {
+  background-color: transparent !important;
+}
+
+.ax-hero,
+.ax-statement,
+.ax-process,
+.ax-footer {
+  background-color: rgba(0, 0, 0, .6) !important;
+}
+
+.ax-faq {
+  background-color: transparent !important;
+}
+
+.ax-concepts {
+  background-color: rgba(244, 244, 242, .72) !important;
+}
+
+.ax-plan:not(.ax-plan-featured),
+.ax-home details {
+  background-color: #fff;
+}
+
+/* cursor ring (no blend-mode: cheaper) */
+.m3d-cursor {
+  position: fixed;
+  left: -18px;
+  top: -18px;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, .55), inset 0 0 0 1.5px rgba(0, 0, 0, .55);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity .25s, scale .2s, background .2s;
+}
+
+.m3d-cursor.is-on {
+  opacity: 1;
+}
+
+.m3d-cursor.is-hot {
+  scale: 1.8;
+  background: rgba(122, 167, 255, .25);
+}
+
+.m3d-cursor.is-down {
+  scale: .7;
+}
+
+/* magnetic buttons */
+.m3d-mag {
+  transition: translate .2s cubic-bezier(.2, .8, .2, 1);
+}
+
+/* restaurant hero photo needs headroom for parallax */
+.rest-hero {
+  overflow: clip;
+}
+
+.rest-hero>img {
+  scale: 1.1;
+}
+
+@media (hover: none),
+(pointer: coarse) {
+  .m3d-cursor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3d-crystals {
+    display: none;
+  }
+}

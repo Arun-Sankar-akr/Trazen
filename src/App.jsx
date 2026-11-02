@@ -9,6 +9,34 @@ import CoachingDemo from './demos/CoachingDemo';
 import RestaurantDemo from './demos/RestaurantDemo';
 import BusinessDemo from './demos/BusinessDemo';
 import logo from "./assets/logo.png"
+import useMotion3D from './motion3d/useMotion3D';
+import CrystalScene from './motion3d/CrystalScene';
+import './motion3d/motion3d.css';
+
+/* 3D motion config per route: tilt = [selector, max degrees]; depth = selector: [parallax px, translateZ px] */
+const MOTION = {
+  home: {
+    palette: { a: '#ff4b2b', b: '#ff9f8a', hot: '#ff6a3d' }, layer: 'back',
+    tilt: [['.m3d-scene', 7], ['.ax-concept', 9], ['.ax-work-card', 6], ['.ax-plan', 6], ['.ax-tile', 6]],
+    depth: { '.ax-ring-a': [-10, -90], '.ax-ring-b': [-18, -50], '.ax-laptop': [8, 0], '.ax-phone': [26, 80], '.ax-chip-a': [34, 120], '.ax-chip-b': [-30, 90] },
+  },
+  coaching: {
+    palette: { a: '#2b2b2b', b: '#9aa0a6', hot: '#171717' }, layer: 'top',
+    tilt: [['.coach-image-wrap', 8], ['.program-grid article', 9]],
+    depth: { '.coach-image-note': [22, 70], '.coach-image-index': [12, 30], '.coach-copy': [-6, 0] },
+  },
+  restaurant: {
+    palette: { a: '#c8742a', b: '#5a3a1c', hot: '#f0a24a' }, layer: 'top',
+    tilt: [['.dish-grid article', 9]],
+    depth: { '.rest-hero > img': [16, 0], '.rest-hero-content': [-10, 0], '.dish-img': [8, 28] },
+  },
+  business: {
+    palette: { a: '#222222', b: '#aeb1b5', hot: '#ff4b2b' }, layer: 'top',
+    tilt: [['.forma-art', 9], ['.forma-service-list article', 4]],
+    depth: { '.art-one': [24, 0], '.art-two': [-16, 0], '.art-circle': [38, 0], '.forma-art > b': [14, 0], '.forma-hero h1': [-8, 0] },
+  },
+};
+const motionFor = (path) => (path.startsWith('/demo/coaching') ? MOTION.coaching : path.startsWith('/demo/restaurant') ? MOTION.restaurant : path.startsWith('/demo/business') ? MOTION.business : MOTION.home);
 
 /* ------------------------------------------------------------------ */
 /*  Content                                                            */
@@ -167,6 +195,7 @@ function Hero() {
 
       <div className="ax-wrap">
         <Reveal delay={120} className="ax-stage" aria-label="Website design preview">
+          <div className="m3d-scene">
           <div className="ax-stage-ring ax-ring-a" /><div className="ax-stage-ring ax-ring-b" />
 
           <div className="ax-laptop">
@@ -205,6 +234,7 @@ function Hero() {
           <div className="ax-chip ax-chip-b">
             <span className="ax-chip-icon ax-chip-icon-red"><Zap size={18} /></span>
             <span><b>Built to connect</b><small>Clear paths to enquiry.</small></span>
+          </div>
           </div>
         </Reveal>
       </div>
@@ -534,8 +564,12 @@ function DemoShell({ children, label }) {
 }
 
 function App() {
+  const { pathname } = useLocation();
+  const motion = motionFor(pathname);
+  useMotion3D(motion, pathname);
   return (
     <>
+      <CrystalScene palette={motion.palette} layer={motion.layer} />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
